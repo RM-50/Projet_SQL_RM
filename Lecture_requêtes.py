@@ -27,10 +27,15 @@ def lire(repertoire):
     li = []
     os.chdir(repertoire)
     for req in l:
-        li.append(open(req))
+        with open(req, 'r') as request:
+            li.append(request.read())
     return li
 
 #print(lire('requete'))
 
 test = lire('requete')
-print(execute(test[0]))
+print(execute(test[1]))
+
+
+
+
