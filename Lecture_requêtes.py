@@ -27,7 +27,6 @@ def lire(repertoire):
     li = []
     os.chdir(repertoire)
     for req in l:
-        
         with open(req, 'r') as request:           
                 li.append(request.read())   
     dct = {cle:valeur for cle in l
