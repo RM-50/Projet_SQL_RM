@@ -1,6 +1,6 @@
 import sqlite3
 import os
-
+import tkinter
 
 
 def execute(req):
@@ -28,15 +28,25 @@ def lire(repertoire):
     os.chdir(repertoire)
     for req in l:
         with open(req, 'r') as request:           
-                li.append(request.read())   
-    dct = {cle:valeur for cle in l
-                      for valeur in li} 
+                li.append(request.read()) 
+    tab = [0 for i in range(len(l))]
+    for i in range(len(tab)):
+        tab[i] = [l[i], li[i]]
+    dct = {cle:valeur for cle,valeur in tab} 
     return dct
 
 test = lire('requete')
 
-print(test)
+def execution(dico):
+    for cle,valeur in dico.items():
+        print(cle)
+        if 'LIMIT' in valeur:
+            execute(valeur)
+        else:
+            execute(valeur + 'LIMIT 10')
+        print('-------------------------------------------')
 
 
-
+#print(test)
+execution(test)
 
