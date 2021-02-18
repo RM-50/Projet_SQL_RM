@@ -19,4 +19,7 @@ def existe(repertoire):
 def est_vide(repertoire):
     return os.stat(repertoire).st_size == 0
 
-print(est_vide('requete'))
+def liste(repertoire):
+    return os.listdir(repertoire)
+
+print(liste('requete'))
