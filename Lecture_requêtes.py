@@ -31,10 +31,9 @@ def lire(repertoire):
             li.append(request.read())
     return li
 
-#print(lire('requete'))
 
 test = lire('requete')
-print(execute(test[1]))
+print(test[1])
 
 
 
