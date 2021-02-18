@@ -22,4 +22,15 @@ def est_vide(repertoire):
 def liste(repertoire):
     return os.listdir(repertoire)
 
-print(liste('requete'))
+def lire(repertoire):
+    l = liste(repertoire)
+    li = []
+    os.chdir(repertoire)
+    for req in l:
+        li.append(open(req))
+    return li
+
+#print(lire('requete'))
+
+test = lire('requete')
+print(execute(test[0]))
