@@ -4,7 +4,7 @@ import os
 
 
 def execute(req):
-    conn = sqlite3.connect('imdb.db')
+    conn = sqlite3.connect('C:/Users/Raphaël/Documents/devoirs/NSI/NSI - Projet SQL (database)/imdb.db')
     c = conn.cursor()
     c.execute(req)
     for row in c:
@@ -31,15 +31,9 @@ def lire(repertoire):
             li.append(request.read())
     return li
 
-
 test = lire('requete')
-print(test[1])
+execute(test[6])
 
-#Résultat :
-"""SELECT primaryTitle
-FROM title_basics
-WHERE tconst IN(SELECT tconst
-                                FROM title_ratings
-                                WHERE numVotes>'10000' AND averageRating>'9')"""
+
 
 
