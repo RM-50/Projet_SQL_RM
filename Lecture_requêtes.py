@@ -16,4 +16,7 @@ def execute(req):
 def existe(repertoire):
     return os.path.isdir(repertoire)
 
-print(existe('requete'))
+def est_vide(repertoire):
+    return os.stat(repertoire).st_size == 0
+
+print(est_vide('requete'))
