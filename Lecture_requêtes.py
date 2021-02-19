@@ -1,10 +1,11 @@
 import sqlite3
 import os
 import tkinter
-
+import fileinput
 
 def execute(req):
-    conn = sqlite3.connect('C:/Users/Raphaël/Documents/devoirs/NSI/NSI - Projet SQL (database)/imdb.db')
+    #conn = sqlite3.connect('C:/Users/Raphaël/Documents/devoirs/NSI/NSI - Projet SQL (database)/imdb.db')
+    conn = sqlite3.connect('C:/Users/Elève/Documents/Cours/Projet_SQL_RM-main/imdb.db')
     c = conn.cursor()
     c.execute(req)
     for row in c:
@@ -35,7 +36,7 @@ def lire(repertoire):
     dct = {cle:valeur for cle,valeur in tab} 
     return dct
 
-test = lire('requete')
+#test = lire('requetes')
 
 def execution(dico):
     for cle,valeur in dico.items():
@@ -48,5 +49,32 @@ def execution(dico):
 
 
 #print(test)
-execution(test)
+#execution(test)
 
+"""def ouverture(r):
+    t = [['','']]
+    os.chdir('tests')
+    for line in fileinput.input('alire.md'):
+        if r in line:
+            t[0][0] = line
+        else:
+            print('error')
+    fileinput.close()
+    return t
+
+#ouverture('#01')""" # Tentatice de ne sais pas vraiment quoi
+
+def choisir_requete(r, rep=lire('requetes')):
+    return execution2(rep[r], r)           
+
+
+
+def execution2(r, rep):
+    print(rep)
+    if 'LIMIT' in r:
+        execute(r)
+    else:
+        execute(r + 'LIMIT 10')
+    print('-------------------------------------------')
+
+choisir_requete('req18.sql')
