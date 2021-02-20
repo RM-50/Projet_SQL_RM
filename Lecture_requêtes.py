@@ -1,11 +1,10 @@
 import sqlite3
 import os
 import tkinter
-import fileinput
 
 def execute(req):
-    #conn = sqlite3.connect('C:/Users/Raphaël/Documents/devoirs/NSI/NSI - Projet SQL (database)/imdb.db')
-    conn = sqlite3.connect('C:/Users/Elève/Documents/Cours/Projet_SQL_RM-main/imdb.db')
+    conn = sqlite3.connect('C:/Users/Raphaël/Documents/devoirs/NSI/NSI - Projet SQL (database)/imdb.db')
+    #conn = sqlite3.connect('C:/Users/Elève/Documents/Cours/Projet_SQL_RM-main/imdb.db')
     c = conn.cursor()
     c.execute(req)
     for row in c:
@@ -24,57 +23,43 @@ def liste(repertoire):
     return os.listdir(repertoire)
 
 def lire(repertoire):
-    l = liste(repertoire)
+    if os.path.basename(os.getcwd()) != repertoire:
+        l = liste(repertoire)
+        os.chdir(repertoire)       
+    else:
+        os.chdir(os.path.dirname(os.getcwd()))
+        l = liste(repertoire)
+        os.chdir(repertoire)
     li = []
-    os.chdir(repertoire)
+    requete = ''
     for req in l:
-        with open(req, 'r') as request:           
-                li.append(request.read()) 
+        requete = ''
+        with open(req, 'r') as file:
+            line = file.readlines()
+            for lignes in line[1:]:
+                requete += lignes
+            li.append([line[0], requete])
+    li.sort()
     tab = [0 for i in range(len(l))]
     for i in range(len(tab)):
-        tab[i] = [l[i], li[i]]
-    dct = {cle:valeur for cle,valeur in tab} 
+        tab[i] = [i+1, li[i]]
+    dct = {cle:valeur for cle,valeur in tab}
     return dct
 
-#test = lire('requetes')
-
-def execution(dico):
-    for cle,valeur in dico.items():
-        print(cle)
-        if 'LIMIT' in valeur:
-            execute(valeur)
-        else:
-            execute(valeur + 'LIMIT 10')
-        print('-------------------------------------------')
-
-
-#print(test)
-#execution(test)
-
-"""def ouverture(r):
-    t = [['','']]
-    os.chdir('tests')
-    for line in fileinput.input('alire.md'):
-        if r in line:
-            t[0][0] = line
-        else:
-            print('error')
-    fileinput.close()
-    return t
-
-#ouverture('#01')""" # Tentatice de ne sais pas vraiment quoi
-
-def choisir_requete(r, rep=lire('requetes')):
-    return execution2(rep[r], r)           
-
-
-
-def execution2(r, rep):
-    print(rep)
-    if 'LIMIT' in r:
-        execute(r)
+def execution(req):
+    dico = lire('requetes')
+    print(dico[req][0])
+    if 'LIMIT' in dico[req][1]:
+        execute(dico[req][1])
     else:
-        execute(r + 'LIMIT 10')
+        execute(dico[req][1]+ 'LIMIT 10')
     print('-------------------------------------------')
 
-choisir_requete('req18.sql')
+execution(1)
+execution(2)
+execution(3)
+execution(4)
+execution(5)
+execution(6)
+execution(7)
+
