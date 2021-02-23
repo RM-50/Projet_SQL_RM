@@ -1,10 +1,12 @@
 """ 
 IMPORTANT : Placer le répertoire contenant les requêtes et la base de donnée 'imdb.db' dans le même répertoire que ce fichier python.
+
+
 """
 
 ##############################################################
 #						Imports								 #
-##############################################################
+#############################################################
 
 import sqlite3
 import os
