@@ -9,7 +9,8 @@ def execute(req,titre=''):
 	c = conn.cursor()
 	c.execute(req)
 	for row in c:
-		result += row[0] +'\n'
+		result += '+------------------------+\n|'+ str(row[0]) +'\t\t\t |\n'
+	result += '+------------------------+\n'
 	afficher_table(result,titre)
 	conn.close()
     
@@ -120,4 +121,5 @@ def affichage(texte, titre = "Requêtes tables"):
 	text.pack(side = tkinter.LEFT, expand = True, fill = tkinter.BOTH)
 	root.mainloop()
 
+ 
 execution()
