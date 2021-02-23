@@ -1,20 +1,21 @@
-##########################################################################################################
-#			  			   Imports			     			 #
-##########################################################################################################
+##############################################################
+#						Imports								 #
+##############################################################
 
 import sqlite3
 import os
 import tkinter
 
 
-##################################################################################################
+##############################################################
 #					Lecture des requêtes					 #
-##################################################################################################
+##############################################################
 
 
 def execute(req,titre=''):	
 	result = ''
-	conn = sqlite3.connect('C:/Users/Raphaël/Documents/devoirs/NSI/NSI - Projet SQL (database)/imdb.db')
+	os.chdir(os.path.dirname(os.getcwd()))
+	conn = sqlite3.connect('imdb.db')
 	#conn = sqlite3.connect('C:/Users/Elève/Documents/Cours/Projet_SQL_RM-main/imdb.db')
 	c = conn.cursor()
 	c.execute(req)
@@ -31,44 +32,54 @@ def est_vide(repertoire):
     return os.stat(repertoire).st_size == 0
 
 def liste(repertoire):
-    return os.listdir(repertoire)
+	if existe(repertoire) and not est_vide(repertoire):
+    		return os.listdir(repertoire)
+	else:
+		return "Ce repertoire n'existe pas"
 
 def lire(repertoire):
-    if os.path.basename(os.getcwd()) != repertoire:
-        l = liste(repertoire)
-        os.chdir(repertoire)       
-    else:
-        os.chdir(os.path.dirname(os.getcwd()))
-        l = liste(repertoire)
-        os.chdir(repertoire)
-    li = []
-    requete = ''
-    for req in l:
-        requete = ''
-        with open(req, 'r') as file:
-            line = file.readlines()
-            for lignes in line[1:]:
-                requete += lignes
-            li.append([line[0], requete])
-    li.sort()
-    tab = [0 for i in range(len(l))]
-    for i in range(len(tab)):
-        tab[i] = [i+1, li[i]]
-    dct = {cle:valeur for cle,valeur in tab}
-    return dct
-
-def execution():
-	req = int(input("Quelle requête ? (commence à la requête 1, pas 01 ni 0) : "))
-	dico = lire('requetes')
-	if 'LIMIT' in dico[req][1]:
-		execute(dico[req][1], dico[req][0])
+	if existe(repertoire) and not est_vide(repertoire):
+		if os.path.basename(os.getcwd()) != repertoire:
+			l = liste(repertoire)
+			os.chdir(repertoire)       
+		else:
+			os.chdir(os.path.dirname(os.getcwd()))
+			l = liste(repertoire)
+			os.chdir(repertoire)
+		li = []
+		requete = ''
+		for req in l:
+			requete = ''
+			with open(req, 'r') as file:
+				line = file.readlines()
+				for lignes in line[1:]:
+					requete += lignes
+				li.append([line[0], requete])
+		li.sort()
+		tab = [0 for i in range(len(l))]
+		for i in range(len(tab)):
+			tab[i] = [i+1, li[i]]
+		dct = {cle:valeur for cle,valeur in tab}
+		return dct
 	else:
-		execute(dico[req][1] + 'LIMIT 10', dico[req][0])
-	print('-------------------------------------------')
+		return "Ce repertoire n'existe pas"
+    
+def execution():
+	repertoire = input('Repertoire contenant les requete ? : ')
+	if existe(repertoire) and not est_vide(repertoire):
+		dico = lire(repertoire)
+		req = int(input("Quelle requete ? (commence à la requête 1, pas 01 ni 0) : "))	
+		if 'LIMIT' in dico[req][1]:
+			execute(dico[req][1], dico[req][0])
+		else:
+			execute(dico[req][1] + 'LIMIT 10', dico[req][0])
+		print('-------------------------------------------')
+	else:
+		print("Ce repertoire n'existe pas ou est introuvable, veuillez verifier l'orthographe.")
 
-##################################################################################################################
+##############################################################
 # 						Affichage 							 #
-##################################################################################################################
+##############################################################
 
 
 def afficher_table(table, titre ="", debut = 1, fin = None):
@@ -121,8 +132,8 @@ def affichage(texte, titre = "Requêtes tables"):
 	text.pack(side = tkinter.LEFT, expand = True, fill = tkinter.BOTH)
 	root.mainloop()
 
-##################################################################################################################
+##############################################################
 #						 Execution							 #
-##################################################################################################################
+##############################################################
  
 execution()
