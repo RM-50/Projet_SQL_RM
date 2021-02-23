@@ -1,6 +1,16 @@
+##############################################################
+#						Imports								 #
+##############################################################
+
 import sqlite3
 import os
 import tkinter
+
+
+##############################################################
+#					Lecture des requêtes					 #
+##############################################################
+
 
 def execute(req,titre=''):	
 	result = ''
@@ -13,8 +23,6 @@ def execute(req,titre=''):
 	result += '+------------------------+\n'
 	afficher_table(result,titre)
 	conn.close()
-    
-#print(execute("select * from title_basics limit 10"))
 
 def existe(repertoire):
     return os.path.isdir(repertoire)
@@ -58,16 +66,9 @@ def execution():
 		execute(dico[req][1] + 'LIMIT 10', dico[req][0])
 	print('-------------------------------------------')
 
-"""execution(1)
-execution(2)
-execution(3)
-execution(4)
-execution(5)
-execution(6)
-execution(7)
-"""
-
-#####
+##############################################################
+# 						Affichage 							 #
+##############################################################
 
 
 def afficher_table(table, titre ="", debut = 1, fin = None):
@@ -88,7 +89,6 @@ def afficher_table(table, titre ="", debut = 1, fin = None):
 	"""
 	if titre != "":
 		titre += "\n\n"
-	#print(titre + texte_table(table, debut, fin))
 	affichage(titre + table, titre)
 
 
@@ -121,5 +121,8 @@ def affichage(texte, titre = "Requêtes tables"):
 	text.pack(side = tkinter.LEFT, expand = True, fill = tkinter.BOTH)
 	root.mainloop()
 
+##############################################################
+#						 Execution							 #
+##############################################################
  
 execution()
