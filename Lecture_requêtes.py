@@ -1,3 +1,7 @@
+""" 
+IMPORTANT : Placer le répertoire contenant les requêtes et la base de donnée 'imdb.db' dans le même répertoire que ce fichier python.
+"""
+
 ##############################################################
 #						Imports								 #
 ##############################################################
@@ -32,17 +36,23 @@ def execute(req,titre=''):
 	afficher_table(result,titre)
 	conn.close()
 
+##################################################################################################################################################
+
 def existe(repertoire):
 	"""
 	Renvoie True si le répertoire 'repertoire' placé en argument existe.
 	"""
 	return os.path.isdir(repertoire)
 
+
 def est_vide(repertoire):
 	"""
 	Renvoie True si le répertoire 'repertoire' placé en argument est vide.
 	"""
 	return os.stat(repertoire).st_size == 0
+
+##################################################################################################################################################
+
 
 def liste(repertoire):
 	"""
@@ -58,7 +68,9 @@ def liste(repertoire):
     		return os.listdir(repertoire)
 	else:
 		return "Ce repertoire n'existe pas ou est introuvable, veuillez verifier l'orthographe."
-	
+
+##################################################################################################################################################
+
 def lire(repertoire):
 	"""
 	Cette fonction permet de lister les requêtes SQL d'un répertoire 'repertoire' placé en paramètre.
@@ -69,44 +81,44 @@ def lire(repertoire):
 		Sinon :
 			 "Ce repertoire n'existe pas ou est introuvable, veuillez verifier l'orthographe."
 	"""
-	if existe(repertoire) and not est_vide(repertoire):
-		if os.path.basename(os.getcwd()) != repertoire:
-			l = liste(repertoire)
-			os.chdir(repertoire)       
-		else:
-			os.chdir(os.path.dirname(os.getcwd()))
-			l = liste(repertoire)
-			os.chdir(repertoire)
+	if existe(repertoire) and not est_vide(repertoire): 			# test la présence du répertoire 'repertoire' et son contenu
+		if os.path.basename(os.getcwd()) != repertoire: 			# test si le repertoire actuel est different du repertoire 'repertoire'
+			l = liste(repertoire)									# Si oui, se placer dans le repertoire 'repertoire' et le lister
+			os.chdir(repertoire)       							
+		else:						
+			l = liste(os.path.dirname(os.getcwd()))					# Sinon, lister le repertoire actuel
 		li = []
 		requete = ''
 		for req in l:
 			requete = ''
-			with open(req, 'r') as file:
-				line = file.readlines()
+			with open(req, 'r') as file:                            # Ouvre et lit toutes les requêtes du répertoire requête une à une et les place dans une liste de liste.
+				line = file.readlines()								# Chaque sous-liste contient comme premier élément le titre de la requête et la requête elle-même comme second élément
 				for lignes in line[1:]:
 					requete += lignes
 				li.append([line[0], requete])
-		li.sort()
+		li.sort()													# Trier les requêtes dans l'ordre croissant, cela va nous être utile par la suite
 		tab = [0 for i in range(len(l))]
-		for i in range(len(tab)):
+		for i in range(len(tab)):									# Creer une liste de liste contenant chacune un entier > 0 et une liste (une sous-liste vue précédemment)
 			tab[i] = [i+1, li[i]]
-		dct = {cle:valeur for cle,valeur in tab}
-		return dct
+		dct = {cle:valeur for cle,valeur in tab}					# Convertit le tableau 'tab' en dictionnaire :
+		return dct													# Clé : entier > 0   ; Valeur : liste de type [titre de la requête, requête elle-même]	
 	else:
 		return "Ce repertoire n'existe pas ou est introuvable, veuillez verifier l'orthographe."
-    
+
+##################################################################################################################################################
+
 def execution():
 	"""
 	Fait appel a une fonction 'execute()' pour executer l'une des requêtes stockée dans un dictionnaire.
 	"""
-	repertoire = input('Repertoire contenant les requete ? : ')
+	repertoire = input('Repertoire contenant les requete ? : ')		# Choix du répertoire contenant les requêtes
 	if existe(repertoire) and not est_vide(repertoire):
-		dico = lire(repertoire)
-		req = int(input("Quelle requete ? (commence à la requête 1, pas 01 ni 0) : "))	
-		if 'LIMIT' in dico[req][1]:
+		dico = lire(repertoire)                                     # création d'un dictionnaire à l'aide de la fonction précédente
+		req = int(input("Quelle requete ? (commence à la requête 1, pas 01 ni 0) : "))	# choix de la requête, entier > 0
+		if 'LIMIT' in dico[req][1]:									# Si la requête contient une limite on l'execute directement
 			execute(dico[req][1], dico[req][0])
 		else:
-			execute(dico[req][1] + 'LIMIT 10', dico[req][0])
+			execute(dico[req][1] + 'LIMIT 10', dico[req][0]) 		# Sinon, on ajoute une limite de 10 éléments maximum avant de l'executer à l'aide de la fonction 'execute()'
 		print('-------------------------------------------')
 	else:
 		print("Ce repertoire n'existe pas ou est introuvable, veuillez verifier l'orthographe.")
