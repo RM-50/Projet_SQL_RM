@@ -13,6 +13,13 @@ import tkinter
 
 
 def execute(req,titre=''):	
+	"""
+	Execute une requête SQL 'req' et affiche le résultat dans une fenêtre TKinter à l'aide d'une fonction 'afficher_table()'
+	
+	Arguments:
+		req : str correspondant à la requête SQL à executer
+		titre : str du titre de la requête 
+	"""
 	result = ''
 	os.chdir(os.path.dirname(os.getcwd()))
 	conn = sqlite3.connect('imdb.db')
@@ -26,18 +33,42 @@ def execute(req,titre=''):
 	conn.close()
 
 def existe(repertoire):
-    return os.path.isdir(repertoire)
+	"""
+	Renvoie True si le répertoire 'repertoire' placé en argument existe.
+	"""
+	return os.path.isdir(repertoire)
 
 def est_vide(repertoire):
-    return os.stat(repertoire).st_size == 0
+	"""
+	Renvoie True si le répertoire 'repertoire' placé en argument est vide.
+	"""
+	return os.stat(repertoire).st_size == 0
 
 def liste(repertoire):
+	"""
+	Cette fonction permet de lister le contenu d'un répertoire 'repertoire' placé en argument de la fonction.
+
+	Renvoie:
+		Si le répertoire 'repertoire' existe et n'est pas vide :
+			La liste des éléments du répertoire 'repertoire'
+		Sinon :
+			 "Ce repertoire n'existe pas ou est introuvable, veuillez verifier l'orthographe."
+	"""
 	if existe(repertoire) and not est_vide(repertoire):
     		return os.listdir(repertoire)
 	else:
-		return "Ce repertoire n'existe pas"
-
+		return "Ce repertoire n'existe pas ou est introuvable, veuillez verifier l'orthographe."
+	
 def lire(repertoire):
+	"""
+	Cette fonction permet de lister les requêtes SQL d'un répertoire 'repertoire' placé en paramètre.
+
+	Renvoie:
+		Si le répertoire 'repertoire' existe et n'est pas vide :
+			Un dictionnaire de type {numéro de la requête(à partir de 1) : 'La requête'} 
+		Sinon :
+			 "Ce repertoire n'existe pas ou est introuvable, veuillez verifier l'orthographe."
+	"""
 	if existe(repertoire) and not est_vide(repertoire):
 		if os.path.basename(os.getcwd()) != repertoire:
 			l = liste(repertoire)
@@ -62,9 +93,12 @@ def lire(repertoire):
 		dct = {cle:valeur for cle,valeur in tab}
 		return dct
 	else:
-		return "Ce repertoire n'existe pas"
+		return "Ce repertoire n'existe pas ou est introuvable, veuillez verifier l'orthographe."
     
 def execution():
+	"""
+	Fait appel a une fonction 'execute()' pour executer l'une des requêtes stockée dans un dictionnaire.
+	"""
 	repertoire = input('Repertoire contenant les requete ? : ')
 	if existe(repertoire) and not est_vide(repertoire):
 		dico = lire(repertoire)
