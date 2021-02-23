@@ -68,8 +68,6 @@ execution(7)
 
 #####
 
-def texte_table(table,debut, fin):
-	return table
 
 def afficher_table(table, titre ="", debut = 1, fin = None):
 	"""
@@ -88,9 +86,9 @@ def afficher_table(table, titre ="", debut = 1, fin = None):
 		rien
 	"""
 	if titre != "":
-		titre += "\n"
+		titre += "\n\n"
 	#print(titre + texte_table(table, debut, fin))
-	affichage(titre + texte_table(table, debut, fin), titre)
+	affichage(titre + table, titre)
 
 
 def affichage(texte, titre = "Requêtes tables"):
