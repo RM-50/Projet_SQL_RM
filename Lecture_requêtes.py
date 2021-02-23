@@ -1,12 +1,13 @@
 """ 
 IMPORTANT : Placer le répertoire contenant les requêtes et la base de donnée 'imdb.db' dans le même répertoire que ce fichier python.
 
-
+# Sur GitHub, la tabulation est de 8 espaces et je n'arrive pas à le changer ainsi il peut y avoir des morceaux de codes qui semblent étranges, notamment les commentaires.
+Si possible, lire le document avec une tabulation de 4 espaces pour une meilleure lisisbilité.
 """
 
 ##############################################################
 #						Imports								 #
-##############################################################
+#############################################################
 
 import sqlite3
 import os
