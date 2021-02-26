@@ -129,7 +129,6 @@ def execution():
 			execute(dico[req][1], dico[req][0])
 		else:
 			execute(dico[req][1] + 'LIMIT 10', dico[req][0]) 		# Sinon, on ajoute une limite de 10 éléments maximum avant de l'executer à l'aide de la fonction 'execute()'
-		print('-------------------------------------------')
 	else:
 		print("Ce repertoire n'existe pas ou est introuvable, veuillez verifier l'orthographe.")
 
