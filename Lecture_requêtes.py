@@ -33,9 +33,16 @@ def execute(req,titre=''):
 	#conn = sqlite3.connect('C:/Users/Elève/Documents/Cours/Projet_SQL_RM-main/imdb.db')
 	c = conn.cursor()
 	c.execute(req)
-	for row in c:
-		result += '+------------------------+\n|'+ str(row[0]) +'\t\t\t |\n'
-	result += '+------------------------+\n'
+	for row in c:		
+		for j in range(len(row)):
+			result += '+------------------------'
+		result += '+\n|'
+		for i in range(len(row)):
+			result += str(row[i]) +'\t\t\t '+i*' '+'|'
+		result +='\n'
+	for k in range(len(row)):
+		result += '+------------------------'
+	result += '+\n'
 	afficher_table(result,titre)
 	conn.close()
 
@@ -131,7 +138,7 @@ def execution():
 ##############################################################
 
 
-def afficher_table(table, titre ="", debut = 1, fin = None):
+def afficher_table(table, titre =""):
 	"""
 	Affiche une table.
 	Cette fonction était demandée dans le sujet.
@@ -141,9 +148,6 @@ def afficher_table(table, titre ="", debut = 1, fin = None):
 	Arguments:
 		table: une liste de tuples
 		titre: str du titre à afficher avant la table
-		debut: indice de la première ligne que l'on veut afficher
-		fin: indice de la dernière ligne que l'on veut afficher
-			si fin est à None, on affiche jusqu'à la dernière ligne
 	Renvoi:
 		rien
 	"""
@@ -186,3 +190,17 @@ def affichage(texte, titre = "Requêtes tables"):
 ##############################################################
  
 execution()
+
+"""
+def projection_table(table,a=-1,b=-1,c=-1,d=-1,e=-1,f=-1,g=-1,h=-1,i=-1):
+	resultat = []
+	conn = sqlite3.connect('imdb.db')
+	cu = conn.cursor()
+	req = 'SELECT * FROM ' + table
+	cu.execute(req)
+	for row in cu:
+		resultat.append(row)
+	conn.close()
+	
+print(projection_table('title_basics',0,1))
+"""
