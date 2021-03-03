@@ -193,16 +193,3 @@ def affichage(texte, titre = "Requêtes tables"):
  
 execution()
 
-"""
-def projection_table(table,a=-1,b=-1,c=-1,d=-1,e=-1,f=-1,g=-1,h=-1,i=-1):
-	resultat = []
-	conn = sqlite3.connect('imdb.db')
-	cu = conn.cursor()
-	req = 'SELECT * FROM ' + table
-	cu.execute(req)
-	for row in cu:
-		resultat.append(row)
-	conn.close()
-	
-print(projection_table('title_basics',0,1))
-"""
