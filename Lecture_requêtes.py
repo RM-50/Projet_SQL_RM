@@ -125,12 +125,15 @@ def execution():
 	if existe(repertoire) and not est_vide(repertoire):
 		dico = lire(repertoire)                                     # création d'un dictionnaire à l'aide de la fonction précédente
 		req = int(input("Quelle requete ? (commence à la requête 1, pas 01 ni 0) : "))	# choix de la requête, entier > 0
+		if type(req) != int or req not in dico:
+			print("Numéro de requetes invalide")
+			return None
 		if 'LIMIT' in dico[req][1]:									# Si la requête contient une limite on l'execute directement
 			execute(dico[req][1], dico[req][0])
 		else:
 			execute(dico[req][1] + 'LIMIT 10', dico[req][0]) 		# Sinon, on ajoute une limite de 10 éléments maximum avant de l'executer à l'aide de la fonction 'execute()'
 	else:
-		print("Ce repertoire n'existe pas ou est introuvable, veuillez verifier l'orthographe.")
+		print("Ce repertoire n'existe pas ou est introuvable, veuillez verifier l'orthographe. Si l'orthographe est correcte, verifiez que le repertoire n'est pas vide.")
 
 ##############################################################
 # 						Affichage 							 #
