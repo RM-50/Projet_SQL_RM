@@ -7,7 +7,7 @@ Si possible, lire le document avec une tabulation de 4 espaces pour une meilleur
 
 ##############################################################
 #						Imports								 #
-#############################################################
+##############################################################
 
 import sqlite3
 import os
