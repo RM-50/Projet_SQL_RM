@@ -205,9 +205,6 @@ def menu(dico):
 	validate = tkinter.Button(root, text='valider', command=root.quit)
 	validate.pack()
 	root.mainloop()
-	if type(int(v.get())) != int or int(v.get()) not in dico:
-			print("Numéro de requetes invalide")
-			return None
 	if 'LIMIT' in dico[int(v.get())][1]:									# Si la requête contient une limite on l'execute directement
 		execute(dico[int(v.get())][1], dico[int(v.get())][0])
 	else:
