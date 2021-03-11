@@ -122,7 +122,7 @@ def execution():
 	Fait appel a une fonction 'execute()' pour executer l'une des requêtes stockée dans un dictionnaire.
 	"""
 
-	repertoire = input('Repertoire contenant les requete ? : ')		# Choix du répertoire contenant les requêtes
+	repertoire = 'requetes'		# Choix du répertoire contenant les requêtes
 	if existe(repertoire) and not est_vide(repertoire):
 		dico = lire(repertoire)     								# création d'un dictionnaire à l'aide de la fonction précédente
 		menu(dico)                                
