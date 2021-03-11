@@ -121,10 +121,12 @@ def execution():
 	"""
 	Fait appel a une fonction 'execute()' pour executer l'une des requêtes stockée dans un dictionnaire.
 	"""
+
 	repertoire = input('Repertoire contenant les requete ? : ')		# Choix du répertoire contenant les requêtes
 	if existe(repertoire) and not est_vide(repertoire):
-		dico = lire(repertoire)                                     # création d'un dictionnaire à l'aide de la fonction précédente
-		req = int(input("Quelle requete ? (commence à la requête 1, pas 01 ni 0) : "))	# choix de la requête, entier > 0
+		dico = lire(repertoire)     								# création d'un dictionnaire à l'aide de la fonction précédente
+		menu(dico)                                
+		req = int(input("Quelle requete ? (commence à la requête 1, pas 01 ni 0) : "))	# choix de la requête, entier > 0		
 		if type(req) != int or req not in dico:
 			print("Numéro de requetes invalide")
 			return None
@@ -188,8 +190,16 @@ def affichage(texte, titre = "Requêtes tables"):
 	root.mainloop()
 
 ##############################################################
-#						 Execution							 #
+#						 Menu								 #
 ##############################################################
- 
-execution()
 
+def menu(dico):
+	for i in range(1,len(dico)+1):
+		print(dico[i][0])
+
+
+##############################################################
+#						Execution							 #
+##############################################################
+
+execution()
