@@ -194,12 +194,26 @@ def affichage(texte, titre = "Requêtes tables"):
 ##############################################################
 
 def menu(dico):
-	for i in range(1,len(dico)+1):
-		print(dico[i][0])
 
+	root = tkinter.Tk()
+	root.title('Menu')
+	text=tkinter.Text(root, wrap = 'none')
+	i = len(dico)
+	text.insert('1.0', "Quelle requete ? (commence à la requête 1, pas 01 ni 0) : ")
+	while i >= 1:
+		text.insert("1.0", dico[i][0])
+		text.pack(side = tkinter.LEFT, expand = True, fill = tkinter.BOTH)
+		i -= 1
+	v = tkinter.StringVar()
+	req=tkinter.Entry(root, textvariable=v, validate='all')	
+	req.pack()	
+	validate = tkinter.Button(root, text='valider', command=root.quit)
+	validate.pack()
+	root.mainloop()
+	execute(dico[int(v.get())][1], dico[int(v.get())][0])
+	
 
 ##############################################################
 #						Execution							 #
 ##############################################################
-
-execution()
+menu(lire('requetes'))
