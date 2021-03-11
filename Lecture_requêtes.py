@@ -197,6 +197,9 @@ def menu(dico):
 
 	root = tkinter.Tk()
 	root.title('Menu')
+	RWidth=root.winfo_screenwidth() - 100
+	RHeight=root.winfo_screenheight() - 100
+	root.geometry("%dx%d+50+0"%(RWidth, RHeight))
 	text=tkinter.Text(root, wrap = 'none')
 	i = len(dico)
 	text.insert('1.0', "Quelle requete ? (commence à la requête 1, pas 01 ni 0) : ")
@@ -210,10 +213,14 @@ def menu(dico):
 	validate = tkinter.Button(root, text='valider', command=root.quit)
 	validate.pack()
 	root.mainloop()
-	execute(dico[int(v.get())][1], dico[int(v.get())][0])
+	if 'LIMIT' in dico[int(v.get())][1]:									# Si la requête contient une limite on l'execute directement
+		execute(dico[int(v.get())][1], dico[int(v.get())][0])
+	else:
+		execute(dico[int(v.get())][1] + 'LIMIT 10', dico[int(v.get())][0]) 		# Sinon, on ajoute une limite de 10 éléments maximum avant de l'executer à l'aide de la fonction 'execute()'
+
 	
 
 ##############################################################
 #						Execution							 #
 ##############################################################
-menu(lire('requetes'))
+execution()
