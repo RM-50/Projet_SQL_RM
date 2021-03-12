@@ -1,3 +1,5 @@
+#!C:\Python39\python.exe
+
 """ 
 IMPORTANT : Placer le répertoire contenant les requêtes et la base de donnée 'imdb.db' dans le même répertoire que ce fichier python.
 
@@ -234,8 +236,10 @@ def finhtml():
 
 
 def execute_sql_html(sql):
+	os.chdir(os.path.dirname(os.getcwd()))
 	connexion = sqlite3.connect('imdb.db')
 	cur = connexion.cursor()
+	cur.execute(sql)
 	rows = cur.fetchall()
 	debuthtml()
 	table = "<table>\n"
@@ -245,9 +249,20 @@ def execute_sql_html(sql):
 	print(table)
 	finhtml()
 
+def execution_html(req):
+
+	repertoire = 'requetes'		# Choix du répertoire contenant les requêtes
+	if existe(repertoire) and not est_vide(repertoire):
+		dico = lire(repertoire)     								# création d'un dictionnaire à l'aide de la fonction précédente
+		if 'LIMIT' in dico[req][1]:									# Si la requête contient une limite on l'execute directement
+			execute_sql_html(dico[req][1])
+		else:
+			execute_sql_html(dico[req][1] + 'LIMIT 10') 		# Sinon, on ajoute une limite de 10 éléments maximum avant de l'executer à l'aide de la fonction 'execute()'                              
+	else:
+		print("Ce repertoire n'existe pas ou est introuvable, veuillez verifier l'orthographe. Si l'orthographe est correcte, verifiez que le repertoire n'est pas vide.")
 ##############################################################
 #						Execution							 #
 ##############################################################
 
-#execution()
-execute_sql_html("SELECT primary_title FROM title_basics LIMIT 10")
+execution()
+#execution_html('1')
