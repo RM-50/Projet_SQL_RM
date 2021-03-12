@@ -110,7 +110,7 @@ def lire(repertoire):
 		tab = [0 for i in range(len(l))]
 		for i in range(len(tab)):									# Creer une liste de liste contenant chacune un entier > 0 et une liste (une sous-liste vue précédemment)
 			tab[i] = [i+1, li[i]]
-		dct = {cle:valeur for cle,valeur in tab}					# Convertit le tableau 'tab' en dictionnaire :
+		dct = {str(cle):valeur for cle,valeur in tab}					# Convertit le tableau 'tab' en dictionnaire :
 		return dct													# Clé : entier > 0   ; Valeur : liste de type [titre de la requête, requête elle-même]	
 	else:
 		return "Ce repertoire n'existe pas ou est introuvable, veuillez verifier l'orthographe."
@@ -134,7 +134,7 @@ def execution():
 ##############################################################
 
 
-def afficher_table(table, titre =""):
+def afficher_table(table,titre =""):
 	"""
 	Affiche une table.
 	Cette fonction était demandée dans le sujet.
@@ -179,6 +179,8 @@ def affichage(texte, titre = "Requêtes tables"):
 	scroll_y.pack(side = tkinter.RIGHT, fill = 'y')
 	text.insert("1.0", texte)
 	text.pack(side = tkinter.LEFT, expand = True, fill = tkinter.BOTH)
+	bouton_quitter=tkinter.Button(root, text="quitter", command=root.quit)
+	bouton_quitter.pack()
 	root.mainloop()
 
 ##############################################################
@@ -186,7 +188,8 @@ def affichage(texte, titre = "Requêtes tables"):
 ##############################################################
 
 def menu(dico):
-
+	
+	x = False
 	root = tkinter.Tk()
 	root.title('Menu')
 	RWidth=root.winfo_screenwidth() - 100
@@ -194,25 +197,57 @@ def menu(dico):
 	root.geometry("%dx%d+50+0"%(RWidth, RHeight))
 	text=tkinter.Text(root, wrap = 'none')
 	i = len(dico)
-	text.insert('1.0', "Quelle requete ? (commence à la requête 1, pas 01 ni 0) : ")
+	text.insert('1.0', "\nQuelle requete ? (commence à la requête 1, pas 01 ni 0) : ")
 	while i >= 1:
-		text.insert("1.0", dico[i][0])
-		text.pack(side = tkinter.LEFT, expand = True, fill = tkinter.BOTH)
+		text.insert("1.0", dico[str(i)][0])
+		text.pack(side = tkinter.LEFT, expand=True ,fill=tkinter.BOTH)
 		i -= 1
 	v = tkinter.StringVar()
 	req=tkinter.Entry(root, textvariable=v, validate='all')	
 	req.pack()	
 	validate = tkinter.Button(root, text='valider', command=root.quit)
-	validate.pack()
+	validate.pack()	
 	root.mainloop()
-	if 'LIMIT' in dico[int(v.get())][1]:									# Si la requête contient une limite on l'execute directement
-		execute(dico[int(v.get())][1], dico[int(v.get())][0])
+	if v.get() not in dico:
+		root.quit
+		affichage("Requête invalide","Error message")
+	if 'LIMIT' in dico[v.get()][1]:									# Si la requête contient une limite on l'execute directement
+		execute(dico[v.get()][1], dico[v.get()][0])
 	else:
-		execute(dico[int(v.get())][1] + 'LIMIT 10', dico[int(v.get())][0]) 		# Sinon, on ajoute une limite de 10 éléments maximum avant de l'executer à l'aide de la fonction 'execute()'
+		execute(dico[v.get()][1] + 'LIMIT 10', dico[v.get()][0]) 		# Sinon, on ajoute une limite de 10 éléments maximum avant de l'executer à l'aide de la fonction 'execute()'
 
-	
+##############################################################
+#						HTML								 #
+##############################################################
+
+
+def debuthtml():
+    print("Content-type: text/html")
+    print("\n")
+    print("<html><head>")
+    print("\n")
+    print(" <style> table, th, td {border: 1px solid black;  padding: 5px; border-collapse: collapse;} </style> ")
+    print("</head><body>")
+
+def finhtml():
+    print("</body></html>")
+
+
+def execute_sql_html(sql):
+	connexion = sqlite3.connect('imdb.db')
+	cur = connexion.cursor()
+	rows = cur.fetchall()
+	debuthtml()
+	table = "<table>\n"
+	for row in rows:
+		table += "<tr><td>\n"+str(row[0])+"</td></tr>\n"
+	table += "</table>\n"
+	print(table)
+	finhtml()
 
 ##############################################################
 #						Execution							 #
 ##############################################################
-execution()
+
+#execution()
+execute_sql_html("SELECT primary_title FROM title_basics LIMIT 10")
