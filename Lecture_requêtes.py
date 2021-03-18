@@ -32,7 +32,6 @@ def execute(req,titre=''):
 	result = ''
 	os.chdir(os.path.dirname(os.getcwd()))
 	conn = sqlite3.connect('imdb.db')
-	#conn = sqlite3.connect('C:/Users/Elève/Documents/Cours/Projet_SQL_RM-main/imdb.db')
 	c = conn.cursor()
 	c.execute(req)
 	for row in c:		
@@ -119,12 +118,11 @@ def lire(repertoire):
 
 ##################################################################################################################################################
 
-def execution():
+def execution(repertoire='requetes'):
 	"""
 	Fait appel a une fonction 'execute()' pour executer l'une des requêtes stockée dans un dictionnaire.
 	"""
-
-	repertoire = 'requetes'		# Choix du répertoire contenant les requêtes
+		# Choix du répertoire contenant les requêtes
 	if existe(repertoire) and not est_vide(repertoire):
 		dico = lire(repertoire)     								# création d'un dictionnaire à l'aide de la fonction précédente
 		menu(dico)                                
@@ -191,7 +189,6 @@ def affichage(texte, titre = "Requêtes tables"):
 
 def menu(dico):
 	
-	x = False
 	root = tkinter.Tk()
 	root.title('Menu')
 	RWidth=root.winfo_screenwidth() - 100
@@ -204,11 +201,14 @@ def menu(dico):
 		text.insert("1.0", dico[str(i)][0])
 		text.pack(side = tkinter.LEFT, expand=True ,fill=tkinter.BOTH)
 		i -= 1
+	text.insert('1.0', "Répertoire requêtes par défaut = 'requetes'\n\n")
 	v = tkinter.StringVar()
 	req=tkinter.Entry(root, textvariable=v, validate='all')	
 	req.pack()	
 	validate = tkinter.Button(root, text='valider', command=root.quit)
 	validate.pack()	
+	#dir_button = tkinter.Button(root, text="changer de répertoire", command=changer_rep)   Tentative d'un bouton changer de répertoire qui ne fonctionne pas
+	#dir_button.pack(side=tkinter.BOTTOM)
 	root.mainloop()
 	if v.get() not in dico:
 		root.quit
@@ -218,10 +218,23 @@ def menu(dico):
 	else:
 		execute(dico[v.get()][1] + 'LIMIT 10', dico[v.get()][0]) 		# Sinon, on ajoute une limite de 10 éléments maximum avant de l'executer à l'aide de la fonction 'execute()'
 
+
+def changer_rep():
+	root = tkinter.Tk()
+	text=tkinter.Text(root, wrap = 'none')
+	text.insert('1.0', "Indiquer le nom du nouveau répertoire : \n")
+	text.pack()
+	v = tkinter.StringVar()
+	req=tkinter.Entry(root, textvariable=v, validate='all')	
+	req.pack()	
+	validate = tkinter.Button(root, text='valider', command=root.quit)
+	validate.pack()
+	root.mainloop()
+	execution(v.get())
 ##############################################################
 #						HTML								 #
 ##############################################################
-
+""" Ceci est un test """
 
 def debuthtml():
     print("Content-type: text/html")
@@ -265,4 +278,4 @@ def execution_html(req):
 ##############################################################
 
 execution()
-#execution_html('1')
+#execution_html('10')       Sert à executer le test HTML, ne fonctionne pas
