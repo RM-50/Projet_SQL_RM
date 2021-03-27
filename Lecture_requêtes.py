@@ -1,4 +1,7 @@
+#!C:\Winpython\python-3.8.5.amd64\python.exe
 #!C:\Python39\python.exe
+#MANGIN Raphaël
+#23-03-2021
 
 """ 
 IMPORTANT : Placer le répertoire contenant les requêtes et la base de donnée 'imdb.db' dans le même répertoire que ce fichier python.
@@ -31,6 +34,9 @@ def execute(req,titre=''):
 	"""
 	result = ''
 	os.chdir(os.path.dirname(os.getcwd()))
+	#if not existe('imdb.db'):
+		#num = str(input("numéro requête"))
+		#"req"+num+".txt"
 	conn = sqlite3.connect('imdb.db')
 	c = conn.cursor()
 	c.execute(req)
@@ -111,7 +117,7 @@ def lire(repertoire):
 		tab = [0 for i in range(len(l))]
 		for i in range(len(tab)):									# Creer une liste de liste contenant chacune un entier > 0 et une liste (une sous-liste vue précédemment)
 			tab[i] = [i+1, li[i]]
-		dct = {str(cle):valeur for cle,valeur in tab}					# Convertit le tableau 'tab' en dictionnaire :
+		dct = {str(cle):valeur for cle,valeur in tab}				# Convertit le tableau 'tab' en dictionnaire :
 		return dct													# Clé : entier > 0   ; Valeur : liste de type [titre de la requête, requête elle-même]	
 	else:
 		return "Ce repertoire n'existe pas ou est introuvable, veuillez verifier l'orthographe."
@@ -128,6 +134,15 @@ def execution(repertoire='requetes'):
 		menu(dico)                                
 	else:
 		print("Ce repertoire n'existe pas ou est introuvable, veuillez verifier l'orthographe. Si l'orthographe est correcte, verifiez que le repertoire n'est pas vide.")
+
+def stockage_execution(text, req):
+	"""
+	Permet de stocker le résultat des execution du programme pour afficher qqch en cas de diparition de la base de données.
+	Argument:
+		text : chaîne de caractère correspondant au résultat de l'execution d'une requête SQL
+	"""
+	#Il faut probablement utiliser la commande os
+	"req"+req+".txt"
 
 ##############################################################
 # 						Affichage 							 #
@@ -188,7 +203,14 @@ def affichage(texte, titre = "Requêtes tables"):
 ##############################################################
 
 def menu(dico):
-	
+	"""
+	Affiche une fenêtre tkinter affichant la liste des requêtes SQL d'un repertoire 'requetes' par défaut.
+	Argument:
+		Un dictionnaire du type Clé : entier > 0
+								Valeur : liste du type [titre de la requête, requête]
+	Renvoi:
+		Rien
+	"""
 	root = tkinter.Tk()
 	root.title('Menu')
 	RWidth=root.winfo_screenwidth() - 100
@@ -213,13 +235,16 @@ def menu(dico):
 	if v.get() not in dico:
 		root.quit
 		affichage("Requête invalide","Error message")
-	if 'LIMIT' in dico[v.get()][1]:									# Si la requête contient une limite on l'execute directement
+	if 'LIMIT' in dico[v.get()][1]:										# Si la requête contient une limite on l'execute directement
 		execute(dico[v.get()][1], dico[v.get()][0])
 	else:
 		execute(dico[v.get()][1] + 'LIMIT 10', dico[v.get()][0]) 		# Sinon, on ajoute une limite de 10 éléments maximum avant de l'executer à l'aide de la fonction 'execute()'
 
 
 def changer_rep():
+	"""
+	Cette fonction ne fonctionne pas
+	"""
 	root = tkinter.Tk()
 	text=tkinter.Text(root, wrap = 'none')
 	text.insert('1.0', "Indiquer le nom du nouveau répertoire : \n")
@@ -234,21 +259,34 @@ def changer_rep():
 ##############################################################
 #						HTML								 #
 ##############################################################
-""" Ceci est un test """
+"""
+Cette partie sert à executer le programme dans une page Web 
+"""
 
 def debuthtml():
-    print("Content-type: text/html")
-    print("\n")
-    print("<html><head>")
-    print("\n")
-    print(" <style> table, th, td {border: 1px solid black;  padding: 5px; border-collapse: collapse;} </style> ")
-    print("</head><body>")
+	"""
+	Initialise le code html
+	"""
+	print("Content-type: text/html")
+	print("\n")
+	print("<html><head>")
+	print("\n")
+	print(" <style> table, th, td {border: 1px solid black;  padding: 5px; border-collapse: collapse;} </style> ")
+	print("</head><body>")
 
 def finhtml():
-    print("</body></html>")
+	"""
+	Termine le code html
+	"""
+	print("</body></html>")
 
 
 def execute_sql_html(sql):
+	"""
+	Fonction exécutant une requête sql et affiche son résultat sous forme d'un tableau en html
+	Argument:
+		Fichier contenant le code d'une requête SQL
+	"""
 	os.chdir(os.path.dirname(os.getcwd()))
 	connexion = sqlite3.connect('imdb.db')
 	cur = connexion.cursor()
@@ -257,20 +295,27 @@ def execute_sql_html(sql):
 	debuthtml()
 	table = "<table>\n"
 	for row in rows:
-		table += "<tr><td>\n"+str(row[0])+"</td></tr>\n"
+		for i in range(len(row)):
+			table += "<td>"+str(row[i])+ "</td>"
+		table += "<tr></tr>"
 	table += "</table>\n"
 	print(table)
 	finhtml()
 
 def execution_html(req):
-
-	repertoire = 'requetes'		# Choix du répertoire contenant les requêtes
+	"""
+	Appelle une fonction lire() et une fonction execute_sql_html().
+	Execute une requête SQL
+	Argument:
+		Numéro de la requête SQL désirée
+	"""
+	repertoire = 'requetes'											# Choix du répertoire contenant les requêtes
 	if existe(repertoire) and not est_vide(repertoire):
 		dico = lire(repertoire)     								# création d'un dictionnaire à l'aide de la fonction précédente
 		if 'LIMIT' in dico[req][1]:									# Si la requête contient une limite on l'execute directement
 			execute_sql_html(dico[req][1])
 		else:
-			execute_sql_html(dico[req][1] + 'LIMIT 10') 		# Sinon, on ajoute une limite de 10 éléments maximum avant de l'executer à l'aide de la fonction 'execute()'                              
+			execute_sql_html(dico[req][1] + 'LIMIT 10') 			# Sinon, on ajoute une limite de 10 éléments maximum avant de l'executer à l'aide de la fonction 'execute()'                              
 	else:
 		print("Ce repertoire n'existe pas ou est introuvable, veuillez verifier l'orthographe. Si l'orthographe est correcte, verifiez que le repertoire n'est pas vide.")
 ##############################################################
@@ -278,4 +323,4 @@ def execution_html(req):
 ##############################################################
 
 execution()
-#execution_html('10')       Sert à executer le test HTML, ne fonctionne pas
+#execution_html('10')       #Sert à executer le test HTML
