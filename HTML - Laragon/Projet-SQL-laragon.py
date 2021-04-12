@@ -111,18 +111,6 @@ def lire(repertoire):
 """ 
 Ce code sert à executer le programme dans une page Web
 """
-"""
-def debuthtml():
-    print("Content-type: text/html")
-    print("\n")
-    print("<html><head>")
-    print("\n")
-    print(" <style> table, th, td {border: 1px solid black;  padding: 5px; border-collapse: collapse;} </style> ")
-    print("</head><body>")
-
-def finhtml():
-    print("</body></html>")
-"""
 
 def execute_sql_html(sql):
 	
