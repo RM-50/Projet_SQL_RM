@@ -146,5 +146,5 @@ def execution_html():
 #						Execution							 #
 ##############################################################
 
-execution_html()       #Sert à executer le test HTML
+execution_html()       #Sert à executer le code
 
