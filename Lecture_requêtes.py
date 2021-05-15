@@ -256,71 +256,9 @@ def changer_rep():
 	validate.pack()
 	root.mainloop()
 	execution(v.get())
-##############################################################
-#						HTML								 #
-##############################################################
-"""
-Cette partie sert à executer le programme dans une page Web 
-"""
 
-def debuthtml():
-	"""
-	Initialise le code html
-	"""
-	print("Content-type: text/html")
-	print("\n")
-	print("<html><head>")
-	print("\n")
-	print(" <style> table, th, td {border: 1px solid black;  padding: 5px; border-collapse: collapse;} </style> ")
-	print("</head><body>")
-
-def finhtml():
-	"""
-	Termine le code html
-	"""
-	print("</body></html>")
-
-
-def execute_sql_html(sql):
-	"""
-	Fonction exécutant une requête sql et affiche son résultat sous forme d'un tableau en html
-	Argument:
-		Fichier contenant le code d'une requête SQL
-	"""
-	os.chdir(os.path.dirname(os.getcwd()))
-	connexion = sqlite3.connect('imdb.db')
-	cur = connexion.cursor()
-	cur.execute(sql)
-	rows = cur.fetchall()
-	debuthtml()
-	table = "<table>\n"
-	for row in rows:
-		for i in range(len(row)):
-			table += "<td>"+str(row[i])+ "</td>"
-		table += "<tr></tr>"
-	table += "</table>\n"
-	print(table)
-	finhtml()
-
-def execution_html(req):
-	"""
-	Appelle une fonction lire() et une fonction execute_sql_html().
-	Execute une requête SQL
-	Argument:
-		Numéro de la requête SQL désirée
-	"""
-	repertoire = 'requetes'											# Choix du répertoire contenant les requêtes
-	if existe(repertoire) and not est_vide(repertoire):
-		dico = lire(repertoire)     								# création d'un dictionnaire à l'aide de la fonction précédente
-		if 'LIMIT' in dico[req][1]:									# Si la requête contient une limite on l'execute directement
-			execute_sql_html(dico[req][1])
-		else:
-			execute_sql_html(dico[req][1] + 'LIMIT 10') 			# Sinon, on ajoute une limite de 10 éléments maximum avant de l'executer à l'aide de la fonction 'execute()'                              
-	else:
-		print("Ce repertoire n'existe pas ou est introuvable, veuillez verifier l'orthographe. Si l'orthographe est correcte, verifiez que le repertoire n'est pas vide.")
 ##############################################################
 #						Execution							 #
 ##############################################################
 
 execution()
-#execution_html('1')       #Sert à executer le test HTML
