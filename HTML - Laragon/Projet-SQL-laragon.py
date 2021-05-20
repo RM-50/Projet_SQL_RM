@@ -1,7 +1,7 @@
 #!C:\Python39\python.exe
 #!C:\Winpython\python-3.8.5.amd64\python.exe
 #MANGIN Raphaël
-#12/04/2021
+#20/05/2021
 """
 Important : j'ai volontairement retiré les requêtes n°2 et n°10 car comme elle mettait du temps à afficher le résultat, laragon plantait. Merci de votre compréhension.
 """
@@ -18,7 +18,7 @@ def menu(rep):
 	Menu affichant les requêtes contenues dans le répertoire 'rep' placé en paramètre sous forme de boutons.
 	"""
 	n = len(rep)
-
+	#Initialisation de la page html
 	print("Content-type: text/html")
 	print("\n")
 	print("<html><head>")
@@ -27,7 +27,7 @@ def menu(rep):
 	print("</head><body>")
 	print(" <h2> Choisir la requete :</h2>")
 	
-	for i in range(1,n+1):
+	for i in range(1,n+1):								# Crée un bouton pour chaque requête qui affiche le résultat en dessous de celui-ci lorsque l'on clic dessus 
 		execution = "'"+str(execute_sql_html(rep[str(i)][1]))+"'"
 		requete = "' "+str(i)+" '"
 		print("\n")
@@ -35,7 +35,7 @@ def menu(rep):
 		print('onclick="document.getElementById(',requete,').innerHTML =',execution,'">')
 		print(rep[str(i)][0],"</button>\n")
 		print(' <p id="',i,'"></p>')
-	print("\n</body>\n</html>")
+	print("\n</body>\n</html>")				#fin du code html
 
 
 ##############################################################
@@ -115,14 +115,14 @@ Ce code sert à executer le programme dans une page Web
 def execute_sql_html(sql):
 	
 		
-		if os.path.basename(os.getcwd()) == 'requetes':
+		if os.path.basename(os.getcwd()) == 'requetes':			# On se replace dans le bon répertoire
 			os.chdir('C:/laragon/www/python')
 		connexion = sqlite3.connect('imdb.db')
 		cur = connexion.cursor()
 		cur.execute(sql)
 		rows = cur.fetchall()
 		table = "<table>"
-		for row in rows:
+		for row in rows:										# Cette boucle execute les requêtes et les intègre au tableau au fur et à mesure
 			for i in range(len(row)):
 				table += "<td>"+str(row[i])+ "</td>"
 			table += "<tr></tr>"
@@ -135,10 +135,6 @@ def execution_html():
     if existe(repertoire) and not est_vide(repertoire):
         dico = lire(repertoire)   
         menu(dico)  							    # création d'un dictionnaire à l'aide de la fonction précédente
-        """if 'LIMIT' in dico[req][1]:									# Si la requête contient une limite on l'execute directement
-            execute_sql_html(dico[req][1])
-        else:
-            execute_sql_html(dico[req][1] + 'LIMIT 10') """			# Sinon, on ajoute une limite de 10 éléments maximum avant de l'executer à l'aide de la fonction 'execute()'                              
     else:
         print("Ce repertoire n'existe pas ou est introuvable, veuillez verifier l'orthographe. Si l'orthographe est correcte, verifiez que le repertoire n'est pas vide.")
 
