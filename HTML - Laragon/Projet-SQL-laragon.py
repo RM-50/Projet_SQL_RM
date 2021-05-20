@@ -122,7 +122,7 @@ def execute_sql_html(sql):
 		cur.execute(sql)
 		rows = cur.fetchall()
 		table = "<table>"
-		for row in rows:										# Cette boucle execute les requêtes et les intègre au tableau au fur et à mesure
+		for row in rows:										# Cette boucle execute la requête et affiche son résultat sous forme de tableau
 			for i in range(len(row)):
 				table += "<td>"+str(row[i])+ "</td>"
 			table += "<tr></tr>"
