@@ -1,7 +1,7 @@
 #!C:\Winpython\python-3.8.5.amd64\python.exe
 #!C:\Python39\python.exe
 #MANGIN Raphaël
-#15-05-2021
+#20-05-2021
 
 """ 
 IMPORTANT : Placer le répertoire contenant les requêtes et la base de donnée 'imdb.db' dans le même répertoire que ce fichier python.
@@ -40,7 +40,7 @@ def execute(req,titre=''):
 	conn = sqlite3.connect('imdb.db')
 	c = conn.cursor()
 	c.execute(req)
-	for row in c:		
+	for row in c:						#On execute les requêtes en les intégrant au tableau au fur et à mesure
 		for j in range(len(row)):
 			result += '+------------------------'
 		result += '+\n|'
